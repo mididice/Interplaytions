@@ -49,6 +49,9 @@
      <Compile Include="Assets\EmptyCrash.cs" />
      <Compile Include="Assets\MatrixCreate.cs" />
      <Compile Include="Assets\PlayerMove.cs" />
+     <Compile Include="Assets\StartBackground.cs" />
+     <Compile Include="Assets\StartBtnController.cs" />
+     <Compile Include="Assets\TutorialBtnController.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
