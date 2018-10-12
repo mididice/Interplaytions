@@ -127,6 +127,9 @@ public class MatrixCreate : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKey (KeyCode.A)) {
+			player.GetComponent<PlayerMove> ().PickCube ();
+		}
 			
 	}
 }

@@ -119,6 +119,7 @@ public class PlayerMove : MonoBehaviour {
 				//st.Push (Point (curxPos, curyPos));
 			}
 		}
+
 		GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setXY (curxPos, curyPos);
 		if (curType > 0 && curType == curGetType) {
 			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setGetType (-1);
