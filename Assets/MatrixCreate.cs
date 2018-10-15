@@ -1,24 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MatrixCreate : MonoBehaviour {
 
+	public GameObject gameOverPanel;
 	public GameObject player;
 	public GameObject []cube;
-	GameObject[,] matrixCube;
+	private GameObject[,] matrixCube;
+	private GameObject curPlayer;
 	// Use this for initialization
 	private int xPos,yPos,row, col,getType,curType;
 	private int[,] Matrix;
 	private int[,] visit;
+	private bool[] completeCube;
 	Stack<KeyValuePair<int,int>> stack=new Stack<KeyValuePair<int,int>>();
 
 	void Start () {
+		gameOverPanel.SetActive (false);
 		row = 12;
 		col = 6;
 		getType = -1;
 		curType = -1;
-	
+		completeCube = new bool[6];
 		Matrix= new int[row, col];
 		visit = new int[row, col];
 		matrixCube = new GameObject[row,col];
@@ -42,7 +47,7 @@ public class MatrixCreate : MonoBehaviour {
 	
 		float cubeRow =cube[0].transform.localScale.x+0.1f;
 		float cubeCol = cube[0].transform.localScale.y+0.1f;
-		Vector3 initPosition = new Vector3 (-3, -1.3f, 0);
+		Vector3 initPosition = new Vector3 (-3, -1.83f, 0);
 
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -53,8 +58,13 @@ public class MatrixCreate : MonoBehaviour {
 
 		xPos = 0;
 		yPos = 0;
-		Instantiate (player, new Vector3 (-3.02f, -1.34f,-0.7f), Quaternion.identity);
+		curPlayer=Instantiate (player, new Vector3 (-3.00f, -1.83f,-0.7f), Quaternion.identity);
 	
+	}
+
+	public void PlayerEnd(){
+		curPlayer.SetActive (false);
+		gameOverPanel.SetActive (true);
 	}
 
 	public int visitChk(){
@@ -69,7 +79,9 @@ public class MatrixCreate : MonoBehaviour {
 	}
 
 	public void myRendererSet(int x,int y){
-		matrixCube [x, y].GetComponent<EmptyCrash> ().Setrenderer ();
+		if (Matrix [x, y] == 0) {
+			matrixCube [x, y].GetComponent<EmptyCrash> ().Setrenderer ();
+		}
 	}
 
 	public void curPosPush(int type){
@@ -79,7 +91,7 @@ public class MatrixCreate : MonoBehaviour {
 
 	public void curPosPop(int x,int y){
 		stack.Pop ();
-		//visit [x, y] = 0;
+		visit [x, y] = 0;
 	}
 
 	public KeyValuePair<int,int> curPosPeek(){
@@ -109,9 +121,24 @@ public class MatrixCreate : MonoBehaviour {
 	}
 
 	public void setGetType(int val){ // set current Pick ColorType status. 
-		if(val==-1) stack.Clear();
-		getType = val;
+		if (val == -1) {
+			if (stack.Count > 1)
+				GameObject.Find ("FontController").GetComponent<FontController> ().CountingScore ((stack.Count - 1) * 100 + 1000);
+			completeCube [getType] = true;
+			bool IsTrue = false;
+			for (int i = 1; i <= 5; i++)
+				if (!completeCube[i])
+					IsTrue = true;
+			stack.Clear ();
+			getType = -1;
 
+			if (!IsTrue) {
+				PlayerEnd ();
+				Time.timeScale = 0;
+			}
+		} else {
+			getType = val;
+		}
 	}
 
 	public int getGetType(){ // get current Pick ColorType status. 
@@ -127,7 +154,7 @@ public class MatrixCreate : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey (KeyCode.A)) {
+		if (Input.GetKeyUp (KeyCode.A)) {
 			player.GetComponent<PlayerMove> ().PickCube ();
 		}
 			

@@ -53,7 +53,8 @@ public class PlayerMove : MonoBehaviour {
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
 					}
-					transform.position += new Vector3 (0, (curCube.transform.localScale.y+0.1f), 0);
+					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
+					transform.position += new Vector3 (0, (curCube.transform.localScale.y+0.157f), 0);
 				} else {
 					curyPos -= 1;
 				}
@@ -72,7 +73,8 @@ public class PlayerMove : MonoBehaviour {
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
 					}
-					transform.position -= new Vector3 (0, (curCube.transform.localScale.y+0.1f), 0);
+					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
+					transform.position -= new Vector3 (0, (curCube.transform.localScale.y+0.157f), 0);
 				} else {
 					curyPos += 1;
 				}
@@ -91,7 +93,8 @@ public class PlayerMove : MonoBehaviour {
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
 					}
-					transform.position -= new Vector3 (curCube.transform.localScale.x+0.1f,  0, 0);
+					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
+					transform.position -= new Vector3 (curCube.transform.localScale.x+0.157f,  0, 0);
 				} else {
 					curxPos += 1;
 				}
@@ -112,7 +115,8 @@ public class PlayerMove : MonoBehaviour {
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
 					}
-					transform.position += new Vector3 (curCube.transform.localScale.x+0.1f, 0, 0);
+					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
+					transform.position += new Vector3 (curCube.transform.localScale.x+0.157f, 0, 0);
 				} else {
 					curxPos -= 1;
 				}
@@ -123,6 +127,7 @@ public class PlayerMove : MonoBehaviour {
 		GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setXY (curxPos, curyPos);
 		if (curType > 0 && curType == curGetType) {
 			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setGetType (-1);
+
 		}
 	}
 
@@ -152,6 +157,7 @@ public class PlayerMove : MonoBehaviour {
 
 	public void PickCube(){
 		CubeType=GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getCurType();
+
 		if (CubeType > 0) {
 			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPush (CubeType);
 			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setGetType (CubeType);
