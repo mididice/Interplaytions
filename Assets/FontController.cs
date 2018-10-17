@@ -10,7 +10,7 @@ public class FontController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		timeleft = 30f;
+		timeleft = 300f;
 		turn = 0;
 		score = 0;
 		min = 0;

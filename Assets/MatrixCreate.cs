@@ -8,6 +8,7 @@ public class MatrixCreate : MonoBehaviour {
 	public GameObject gameOverPanel;
 	public GameObject player;
 	public GameObject []cube;
+	public Sprite[] BlackSprite;
 	private GameObject[,] matrixCube;
 	private GameObject curPlayer;
 	// Use this for initialization
@@ -15,6 +16,9 @@ public class MatrixCreate : MonoBehaviour {
 	private int[,] Matrix;
 	private int[,] visit;
 	private bool[] completeCube;
+	private Animator ani;
+	private SpriteRenderer renderer;
+	private int bottomTileIdx;
 	Stack<KeyValuePair<int,int>> stack=new Stack<KeyValuePair<int,int>>();
 
 	void Start () {
@@ -23,6 +27,7 @@ public class MatrixCreate : MonoBehaviour {
 		col = 6;
 		getType = -1;
 		curType = -1;
+		bottomTileIdx = 1;
 		completeCube = new bool[6];
 		Matrix= new int[row, col];
 		visit = new int[row, col];
@@ -122,13 +127,32 @@ public class MatrixCreate : MonoBehaviour {
 
 	public void setGetType(int val){ // set current Pick ColorType status. 
 		if (val == -1) {
-			if (stack.Count > 1)
+			if (stack.Count > 1) {
+				string typeName = "BottomTile" + bottomTileIdx.ToString ();
+				GameObject.Find(typeName).GetComponent<Image>().sprite=BlackSprite [getType-1];
+				bottomTileIdx++;
 				GameObject.Find ("FontController").GetComponent<FontController> ().CountingScore ((stack.Count - 1) * 100 + 1000);
-			completeCube [getType] = true;
+				completeCube [getType] = true;
+			}
+
 			bool IsTrue = false;
 			for (int i = 1; i <= 5; i++)
 				if (!completeCube[i])
 					IsTrue = true;
+
+			while (stack.Count > 0) {
+				KeyValuePair<int,int> tmp = stack.Peek ();
+				ani = matrixCube [tmp.Key, tmp.Value].GetComponent<Animator> ();
+				if (stack.Count <=1) {
+					ani.SetTrigger ("Empty");
+				}
+				else if(stack.Count>1) {
+					ani.enabled = false;
+					renderer = matrixCube [tmp.Key, tmp.Value].GetComponent<SpriteRenderer> ();
+					renderer.sprite = BlackSprite [getType-1];
+				}
+				stack.Pop ();
+			}
 			stack.Clear ();
 			getType = -1;
 
@@ -137,6 +161,8 @@ public class MatrixCreate : MonoBehaviour {
 				Time.timeScale = 0;
 			}
 		} else {
+			ani=matrixCube[xPos,yPos].GetComponent<Animator>();
+			ani.SetTrigger ("Pick");
 			getType = val;
 		}
 	}

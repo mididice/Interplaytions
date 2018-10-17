@@ -29,7 +29,7 @@ public class StartBtnController : MonoBehaviour {
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
 			gameObject.GetComponent<Image> ().sprite = btnSprite [0];
 			curStartBtnStatus = false;
-		} else if (Input.GetKey (KeyCode.A)) {
+		} else if (Input.GetKeyUp (KeyCode.A)) {
 			if (curStartBtnStatus) {
 				startScene ();
 			}

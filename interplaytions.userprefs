@@ -2,14 +2,14 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\FontController.cs">
     <Files>
-      <File FileName="Assets\MatrixCreate.cs" Line="66" Column="31" />
-      <File FileName="Assets\PlayerMove.cs" Line="116" Column="68" />
-      <File FileName="Assets\EmptyCrash.cs" Line="24" Column="29" />
+      <File FileName="Assets\MatrixCreate.cs" Line="133" Column="21" />
+      <File FileName="Assets\PlayerMove.cs" Line="1" Column="1" />
+      <File FileName="Assets\EmptyCrash.cs" Line="1" Column="1" />
       <File FileName="Assets\StartBtnController.cs" Line="1" Column="1" />
       <File FileName="Assets\TutorialBtnController.cs" Line="1" Column="1" />
       <File FileName="Assets\StartBackground.cs" Line="1" Column="1" />
       <File FileName="Assets\testmid.cs" Line="1" Column="1" />
-      <File FileName="Assets\FontController.cs" Line="8" Column="34" />
+      <File FileName="Assets\FontController.cs" Line="17" Column="11" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -6,12 +6,18 @@ using UnityEngine.UI;
 public class TutorialBtnController : MonoBehaviour {
 
 	public Sprite []btnSprite;
+	public Sprite[] TutorialImg;
+	private Image TutorialRender;
 	public GameObject TutorialPanel;
 	private bool curTutorialBtnStatus;
+	private int curTutorialIdx;
+
 	// Use this for initialization
 	void Start () {
+		curTutorialIdx = 0;
 		curTutorialBtnStatus = true;
 		hideTutorial ();
+		TutorialRender = TutorialPanel.GetComponent<Image> ();
 	}
 
 	// Update is called once per frame
@@ -35,9 +41,20 @@ public class TutorialBtnController : MonoBehaviour {
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
 			gameObject.GetComponent<Image> ().sprite = btnSprite [1];
 			curTutorialBtnStatus = true;
-		} else if (Input.GetKey (KeyCode.A)) {
+		} else if (Input.GetKeyUp (KeyCode.A)) {
 			if (curTutorialBtnStatus) {
-				ShowTutorial ();
+				if (curTutorialIdx == 0) {
+					ShowTutorial ();
+				}
+				if (curTutorialIdx != 3) {
+					TutorialRender.sprite = TutorialImg [curTutorialIdx];
+				}
+				else if (curTutorialIdx == 3) {
+					curTutorialIdx = -1;
+					hideTutorial ();
+				}
+					
+				curTutorialIdx++;
 			}
 		}
 	}

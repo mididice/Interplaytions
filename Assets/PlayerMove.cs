@@ -15,7 +15,6 @@ public class PlayerMove : MonoBehaviour {
 	public GameObject curCube;
 	int curxPos, curyPos,maxPosX,maxPosY;
 	int CubeType,backPosx,backPosy;
-
 	Stack<Point> st;
 	// Use this for initialization
 	void Start () {
