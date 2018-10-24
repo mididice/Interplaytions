@@ -50,6 +50,7 @@
      <Compile Include="Assets\FontController.cs" />
      <Compile Include="Assets\MatrixCreate.cs" />
      <Compile Include="Assets\PlayerMove.cs" />
+     <Compile Include="Assets\ResultMatrix.cs" />
      <Compile Include="Assets\StartBackground.cs" />
      <Compile Include="Assets\StartBtnController.cs" />
      <Compile Include="Assets\TutorialBtnController.cs" />

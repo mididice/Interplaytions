@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MatrixCreate : MonoBehaviour {
 
-	public GameObject gameOverPanel;
+	public GameObject gameOverPanel,gameWinnerPanel;
 	public GameObject player;
 	public GameObject []cube;
 	public Sprite[] BlackSprite;
@@ -19,10 +20,74 @@ public class MatrixCreate : MonoBehaviour {
 	private Animator ani;
 	private SpriteRenderer renderer;
 	private int bottomTileIdx;
+	private string Contectedmatrix;
 	Stack<KeyValuePair<int,int>> stack=new Stack<KeyValuePair<int,int>>();
 
+	void MatrixPatternInit(int idx){
+		if (idx == 0) {
+			Matrix [1, 4] = 1;
+			Matrix [4, 3] = 1;
+			Matrix [2, 3] = 2;
+			Matrix [5, 5] = 2;
+			Matrix [0, 2] = 3;
+			Matrix [8, 0] = 3;
+			Matrix [4, 1] = 4;
+			Matrix [10, 3] = 4;
+			Matrix [7, 4] = 5;
+			Matrix [10, 1] = 5;
+		} else if (idx == 1) {
+			Matrix [1, 2] = 1;
+			Matrix [11,2] = 1;
+			Matrix [3, 0] = 2;
+			Matrix [6, 4] = 2;
+			Matrix [1, 4] = 3;
+			Matrix [2, 1] = 3;
+			Matrix [7,2] = 4;
+			Matrix [9, 4] = 4;
+			Matrix [3, 3] = 5;
+			Matrix [5, 2] = 5;
+		} else if (idx == 2) {
+			Matrix [1, 5] = 1;
+			Matrix [8,4] = 1;
+			Matrix [2, 5] = 2;
+			Matrix [5, 2] = 2;
+			Matrix [3, 1] = 3;
+			Matrix [5, 4] = 3;
+			Matrix [8, 3] = 4;
+			Matrix [10, 1] = 4;
+			Matrix [3, 3] = 5;
+			Matrix [7, 4] = 5;
+		} else if (idx == 3) {
+			Matrix [5, 1] = 1;
+			Matrix [5, 4] = 1;
+			Matrix [2, 2] = 2;
+			Matrix [8, 4] = 2;
+			Matrix [5, 2] = 3;
+			Matrix [9, 1] = 3;
+			Matrix [1, 5] = 4;
+			Matrix [3, 4] = 4;
+			Matrix [7, 3] = 5;
+			Matrix [2, 0] = 5;
+		} else if (idx == 4) {
+			Matrix [1, 4] = 1;
+			Matrix [4, 1] = 1;
+			Matrix [1, 2] = 2;
+			Matrix [6, 0] = 2;
+			Matrix [8, 0] = 3;
+			Matrix [11, 5] = 3;
+			Matrix [3, 3] = 4;
+			Matrix [9, 4] = 4;
+			Matrix [5, 5] = 5;
+			Matrix [9, 2] = 5;
+		}
+	}
+
 	void Start () {
+		PlayerPrefs.SetString ("UserMatrix", "");
+		PlayerPrefs.SetInt ("Score", 0);
+		Contectedmatrix = "";
 		gameOverPanel.SetActive (false);
+		gameWinnerPanel.SetActive (false);
 		row = 12;
 		col = 6;
 		getType = -1;
@@ -39,16 +104,7 @@ public class MatrixCreate : MonoBehaviour {
 			}
 		}
 
-		Matrix [0, 4] = 1;
-		Matrix [2, 3] = 1;
-		Matrix [0, 2] = 2;
-		Matrix [3, 2] = 2;
-		Matrix [3, 0] = 3;
-		Matrix [5, 0] = 3;
-		Matrix [5, 3] = 4;
-		Matrix [1, 3] = 4;
-		Matrix [1, 5] = 5;
-		Matrix [3, 3] = 5;
+		MatrixPatternInit (4);
 	
 		float cubeRow =cube[0].transform.localScale.x+0.1f;
 		float cubeCol = cube[0].transform.localScale.y+0.1f;
@@ -67,9 +123,16 @@ public class MatrixCreate : MonoBehaviour {
 	
 	}
 
-	public void PlayerEnd(){
+	public string getContectedmatrix(){
+		return Contectedmatrix;
+	}
+
+	public void PlayerEnd(int status){
 		curPlayer.SetActive (false);
-		gameOverPanel.SetActive (true);
+		if (status == 0)
+			gameOverPanel.SetActive (true);
+		else
+			gameWinnerPanel.SetActive (true);
 	}
 
 	public int visitChk(){
@@ -139,15 +202,21 @@ public class MatrixCreate : MonoBehaviour {
 			for (int i = 1; i <= 5; i++)
 				if (!completeCube[i])
 					IsTrue = true;
+			bool contectedTrue = false;
 
 			while (stack.Count > 0) {
 				KeyValuePair<int,int> tmp = stack.Peek ();
 				ani = matrixCube [tmp.Key, tmp.Value].GetComponent<Animator> ();
 				if (stack.Count <=1) {
+					if (contectedTrue)
+						Contectedmatrix = Contectedmatrix + "@"+tmp.Key.ToString () + tmp.Value.ToString ();
 					ani.SetTrigger ("Empty");
 				}
 				else if(stack.Count>1) {
 					ani.enabled = false;
+					if(!contectedTrue)Contectedmatrix = Contectedmatrix +  "#" + getType.ToString ()+tmp.Key.ToString () + tmp.Value.ToString ();
+					else Contectedmatrix = Contectedmatrix +tmp.Key.ToString () + tmp.Value.ToString ();
+					contectedTrue=true;
 					renderer = matrixCube [tmp.Key, tmp.Value].GetComponent<SpriteRenderer> ();
 					renderer.sprite = BlackSprite [getType-1];
 				}
@@ -157,8 +226,12 @@ public class MatrixCreate : MonoBehaviour {
 			getType = -1;
 
 			if (!IsTrue) {
-				PlayerEnd ();
+				PlayerEnd (1);
+				int curScore = GameObject.Find ("FontController").GetComponent<FontController> ().getScore ();
+				PlayerPrefs.SetInt ("Score", curScore);
+				PlayerPrefs.SetString ("UserMatrix", Contectedmatrix);
 				Time.timeScale = 0;
+				SceneManager.LoadScene("endscene");
 			}
 		} else {
 			ani=matrixCube[xPos,yPos].GetComponent<Animator>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class FontController : MonoBehaviour {
 
 	public Text gameTime, gameTurn, gameScore;
@@ -26,13 +27,21 @@ public class FontController : MonoBehaviour {
 			min = (int)timeleft / 60;
 			sec = (int)timeleft - (min * 60);
 		} else if (timeleft <= 0) {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().PlayerEnd ();
+			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().PlayerEnd (0);
+			PlayerPrefs.SetInt ("Score", score);
+			string Contectedmatrix = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getContectedmatrix ();
+			PlayerPrefs.SetString ("UserMatrix", Contectedmatrix);
 			Time.timeScale = 0;
+			SceneManager.LoadScene("endscene");
 		} else {
 			sec = (int)timeleft;
 		}
 		gameTime.text=string.Format("TIME LEFT"+"\n    "+"{0:N0} : {1:N0}",min,sec);
 		
+	}
+
+	public int getScore(){
+		return score;
 	}
 
 	public void CountingScore(int point){
