@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class FontController : MonoBehaviour {
 
-	public Text gameTime, gameTurn, gameScore;
+	public Text gameTime, gameTurn, gameScore,havetile;
 	private int turn, score,min,sec;
 	private float timeleft;
 

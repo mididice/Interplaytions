@@ -10,15 +10,23 @@ using System.Runtime.InteropServices;
 public class testmid : MonoBehaviour {
 
 	private static readonly string sAlias = "TeaTimerAudio";
-	private string sFile=@"D:\interplaytions\Assets\test.mid";
+	private string sFile="C:\\Users\\user\\Desktop\\interplaytion_server\\mididice-python\\midiresult\\1.mid";
 	[DllImport("winmm.dll")]
 
 	private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
 	[DllImport("Winmm.dll")]
 	private static extern long PlaySound(byte[] data, IntPtr hMod, UInt32 dwFlags);
 
+    public void SetsFile(string midifilePath)
+    {
+        string chk = midifilePath.Substring(1, midifilePath.Length - 2);
+        chk=chk.Replace(@"\\", @"\");
+        sFile = chk;
+        Play();
+    }
 	public void Play()
 	{
+       // print("Play");
 		_Open(sFile);
 		_Play();
 	}
@@ -44,9 +52,12 @@ public class testmid : MonoBehaviour {
 
 	private void _Play()
 	{
-		string sCommand = "play " + sAlias;
+        string sCommand = "play " + sAlias;
+        print(sFile);
 		mciSendString(sCommand, null, 0, IntPtr.Zero);
-	}
+        Invoke("Stop", 2f);
+
+    }
 
 	private string _Status()
 	{

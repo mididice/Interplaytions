@@ -83,7 +83,8 @@ public class MatrixCreate : MonoBehaviour {
 	}
 
 	void Start () {
-		PlayerPrefs.SetString ("UserMatrix", "");
+        Time.timeScale = 1;
+        PlayerPrefs.SetString ("UserMatrix", "");
 		PlayerPrefs.SetInt ("Score", 0);
 		Contectedmatrix = "";
 		gameOverPanel.SetActive (false);
@@ -98,6 +99,7 @@ public class MatrixCreate : MonoBehaviour {
 		visit = new int[row, col];
 		matrixCube = new GameObject[row,col];
 
+        for (int i = 0; i < 6; i++) completeCube[i] = false;
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				Matrix [i, j] = 0;
@@ -127,15 +129,29 @@ public class MatrixCreate : MonoBehaviour {
 		return Contectedmatrix;
 	}
 
-	public void PlayerEnd(int status){
+    public void EndScene()
+    {
+        SceneManager.LoadScene("endscene");
+    }
+
+    IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(3.0f);
+    }
+
+    public void PlayerEnd(int status){
 		curPlayer.SetActive (false);
 		if (status == 0)
 			gameOverPanel.SetActive (true);
 		else
 			gameWinnerPanel.SetActive (true);
-	}
+        string file=GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GetCombineFile();
+        GameObject.Find("MidiFileChecking").GetComponent<testmid>().SetsFile(file);
+        StartCoroutine(Timer());
+        SceneManager.LoadScene("endscene");
+    }
 
-	public int visitChk(){
+    public int visitChk(){
 		if (visit [xPos, yPos] != 0)
 			return 0;
 		return 1;
@@ -187,7 +203,11 @@ public class MatrixCreate : MonoBehaviour {
 	public int getPos(int x,int y){
 		return Matrix [x, y];
 	}
-
+    
+    public bool chkCompleteCube(int idx)
+    {
+        return completeCube[idx];
+    }
 	public void setGetType(int val){ // set current Pick ColorType status. 
 		if (val == -1) {
 			if (stack.Count > 1) {
@@ -195,7 +215,8 @@ public class MatrixCreate : MonoBehaviour {
 				GameObject.Find(typeName).GetComponent<Image>().sprite=BlackSprite [getType-1];
 				bottomTileIdx++;
 				GameObject.Find ("FontController").GetComponent<FontController> ().CountingScore ((stack.Count - 1) * 100 + 1000);
-				completeCube [getType] = true;
+                GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GenerateUrl(getType);
+                completeCube [getType] = true;
 			}
 
 			bool IsTrue = false;
@@ -231,7 +252,7 @@ public class MatrixCreate : MonoBehaviour {
 				PlayerPrefs.SetInt ("Score", curScore);
 				PlayerPrefs.SetString ("UserMatrix", Contectedmatrix);
 				Time.timeScale = 0;
-				SceneManager.LoadScene("endscene");
+				//SceneManager.LoadScene("endscene");
 			}
 		} else {
 			ani=matrixCube[xPos,yPos].GetComponent<Animator>();

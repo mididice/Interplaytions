@@ -15,9 +15,11 @@ public class PlayerMove : MonoBehaviour {
 	public GameObject curCube;
 	int curxPos, curyPos,maxPosX,maxPosY;
 	int CubeType,backPosx,backPosy;
+    private bool contected;
 	Stack<Point> st;
 	// Use this for initialization
 	void Start () {
+        contected = false;
 		curxPos = 0;
 		curyPos = 0;
 		backPosx = 0;
@@ -26,7 +28,9 @@ public class PlayerMove : MonoBehaviour {
 		maxPosY = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getY();
 	}
 
-	public bool backPosEqual(){
+  
+
+    public bool backPosEqual(){
 		KeyValuePair<int,int> tmp = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPeek ();
 		if (tmp.Key == -1)
 			return false;
@@ -136,30 +140,37 @@ public class PlayerMove : MonoBehaviour {
 			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (1);
 		}
 		else if (col.gameObject.tag == "Cube2") {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (2);
+            GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (2);
 		}
 		else if (col.gameObject.tag == "Cube3") {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (3);
+            GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (3);
 		}
 		else if (col.gameObject.tag == "Cube4") {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (4);
+            GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (4);
 		}
 		else if (col.gameObject.tag == "Cube5") {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (5);
+            GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (5);
 		}
 		else{
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (0);
+            GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (0);
 		}
 
 	}
 
-
+    
 	public void PickCube(){
 		CubeType=GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getCurType();
-
+      
 		if (CubeType > 0) {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPush (CubeType);
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setGetType (CubeType);
+        
+            bool pickTrue = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().chkCompleteCube(CubeType);
+            if (!pickTrue)
+            {
+               // contected = true;
+                //GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GenerateUrl(CubeType);
+                GameObject.Find("Main Camera").GetComponent<MatrixCreate>().curPosPush(CubeType);
+                GameObject.Find("Main Camera").GetComponent<MatrixCreate>().setGetType(CubeType);
+            }
 		}
 	}
 	// Update is called once per frame

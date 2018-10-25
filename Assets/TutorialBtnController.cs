@@ -15,7 +15,7 @@ public class TutorialBtnController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		curTutorialIdx = 0;
-		curTutorialBtnStatus = true;
+		curTutorialBtnStatus = false;
 		hideTutorial ();
 		TutorialRender = TutorialPanel.GetComponent<Image> ();
 	}
