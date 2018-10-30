@@ -31,7 +31,7 @@ public class StartBtnController : MonoBehaviour {
 			curStartBtnStatus = false;
 		} else if (Input.GetKeyUp (KeyCode.A)) {
 			if (curStartBtnStatus) {
-				startScene ();
+                startScene ();
 			}
 		}
 	}

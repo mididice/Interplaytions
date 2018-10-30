@@ -178,3 +178,4 @@ a9bafe3b58972efe0d2c3e1e0ff2f694 Assembly-CSharp.dll:.EmptyCrash
 4b2941066afeca74211aaf6f6e9e8c13 Assembly-CSharp.dll:.PlayerMove
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.midPlayer
 93307bd34e39d73fd24e00ec39c25a91 Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
+8c1efc474508e9abcd7d373f503c9ada Assembly-CSharp.dll:.SoundSetting

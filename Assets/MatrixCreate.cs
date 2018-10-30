@@ -134,23 +134,25 @@ public class MatrixCreate : MonoBehaviour {
         SceneManager.LoadScene("endscene");
     }
 
-    IEnumerator Timer()
-    {
-        yield return new WaitForSeconds(3.0f);
-    }
 
     public void PlayerEnd(int status){
+       
 		curPlayer.SetActive (false);
 		if (status == 0)
 			gameOverPanel.SetActive (true);
 		else
 			gameWinnerPanel.SetActive (true);
-        string file=GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GetCombineFile();
-        GameObject.Find("MidiFileChecking").GetComponent<testmid>().SetsFile(file);
-        StartCoroutine(Timer());
-        SceneManager.LoadScene("endscene");
+      //  string file=GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GetCombineFile();
+       // GameObject.Find("MidiFileChecking").GetComponent<testmid>().SetsFile(file);
+      
     }
 
+    private void EndSceneCall()
+    {
+        string file = GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GetCombineFile();
+        GameObject.Find("MidiFileChecking").GetComponent<testmid>().SetsFile(file);
+        SceneManager.LoadScene("endscene");
+    }
     public int visitChk(){
 		if (visit [xPos, yPos] != 0)
 			return 0;
@@ -216,6 +218,9 @@ public class MatrixCreate : MonoBehaviour {
 				bottomTileIdx++;
 				GameObject.Find ("FontController").GetComponent<FontController> ().CountingScore ((stack.Count - 1) * 100 + 1000);
                 GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GenerateUrl(getType);
+                GameObject.Find("CubeSound").GetComponent<AudioSource>().Stop();
+                GameObject.Find("tileContectedSound").GetComponent<AudioSource>().Play();
+                
                 completeCube [getType] = true;
 			}
 
@@ -251,7 +256,8 @@ public class MatrixCreate : MonoBehaviour {
 				int curScore = GameObject.Find ("FontController").GetComponent<FontController> ().getScore ();
 				PlayerPrefs.SetInt ("Score", curScore);
 				PlayerPrefs.SetString ("UserMatrix", Contectedmatrix);
-				Time.timeScale = 0;
+              
+                Invoke("EndSceneCall", 5.0f);
 				//SceneManager.LoadScene("endscene");
 			}
 		} else {

@@ -32,6 +32,7 @@ public class HomeBtn : MonoBehaviour {
         }
         else if (Input.GetKeyUp(KeyCode.A))
         {
+            GameObject.Find("midiplayer").GetComponent<testmid>().Stop();
             if (Homebtn) SceneManager.LoadScene("startScene");
         }
     }

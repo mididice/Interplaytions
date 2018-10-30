@@ -70,6 +70,7 @@
     <Compile Include="Assets\RestartBtn.cs" />
     <Compile Include="Assets\ResultMatrix.cs" />
     <Compile Include="Assets\SetScore.cs" />
+    <Compile Include="Assets\SoundSetting.cs" />
     <Compile Include="Assets\StartBackground.cs" />
     <Compile Include="Assets\StartBtnController.cs" />
     <Compile Include="Assets\testmid.cs" />

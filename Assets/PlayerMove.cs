@@ -58,6 +58,7 @@ public class PlayerMove : MonoBehaviour {
 					}
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position += new Vector3 (0, (curCube.transform.localScale.y+0.157f), 0);
+                    GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
 				} else {
 					curyPos -= 1;
 				}
@@ -78,7 +79,8 @@ public class PlayerMove : MonoBehaviour {
 					}
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position -= new Vector3 (0, (curCube.transform.localScale.y+0.157f), 0);
-				} else {
+                    GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
+                } else {
 					curyPos += 1;
 				}
 				//st.Push (Point (curxPos, curyPos));
@@ -98,7 +100,8 @@ public class PlayerMove : MonoBehaviour {
 					}
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position -= new Vector3 (curCube.transform.localScale.x+0.157f,  0, 0);
-				} else {
+                    GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
+                } else {
 					curxPos += 1;
 				}
 
@@ -120,7 +123,8 @@ public class PlayerMove : MonoBehaviour {
 					}
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position += new Vector3 (curCube.transform.localScale.x+0.157f, 0, 0);
-				} else {
+                    GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
+                } else {
 					curxPos -= 1;
 				}
 				//st.Push (Point (curxPos, curyPos));
@@ -166,8 +170,10 @@ public class PlayerMove : MonoBehaviour {
             bool pickTrue = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().chkCompleteCube(CubeType);
             if (!pickTrue)
             {
-               // contected = true;
+                // contected = true;
                 //GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GenerateUrl(CubeType);
+                GameObject.Find("CubeSound").GetComponent<SoundSetting>().settingSound(CubeType - 1);
+                GameObject.Find("CubeSound").GetComponent<AudioSource>().Play();
                 GameObject.Find("Main Camera").GetComponent<MatrixCreate>().curPosPush(CubeType);
                 GameObject.Find("Main Camera").GetComponent<MatrixCreate>().setGetType(CubeType);
             }
