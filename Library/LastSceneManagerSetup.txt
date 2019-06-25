@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/firstsene.unity
-  isLoaded: 1
-  isActive: 1
