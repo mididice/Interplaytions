@@ -22,7 +22,7 @@ public class MatrixCreate : MonoBehaviour {
 	private int bottomTileIdx;
 	private string Contectedmatrix;
 	Stack<KeyValuePair<int,int>> stack=new Stack<KeyValuePair<int,int>>();
-
+    
 	void MatrixPatternInit(int idx){
 		if (idx == 0) {
 			Matrix [1, 4] = 1;
@@ -98,7 +98,8 @@ public class MatrixCreate : MonoBehaviour {
 		Matrix= new int[row, col];
 		visit = new int[row, col];
 		matrixCube = new GameObject[row,col];
-
+        
+        
         for (int i = 0; i < 6; i++) completeCube[i] = false;
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -106,7 +107,7 @@ public class MatrixCreate : MonoBehaviour {
 			}
 		}
 
-		MatrixPatternInit (4);
+		MatrixPatternInit (Random.Range(0, 4));
 	
 		float cubeRow =cube[0].transform.localScale.x+0.1f;
 		float cubeCol = cube[0].transform.localScale.y+0.1f;
