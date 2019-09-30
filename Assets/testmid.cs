@@ -20,10 +20,13 @@ public class testmid : MonoBehaviour {
 
     public void SetsFile(string midifilePath)
     {
-        string chk = midifilePath.Substring(1, midifilePath.Length - 2);
-        chk=chk.Replace(@"\\", @"\");
-        sFile = chk;
-        Play();
+        if (midifilePath.Length > 2) {
+            string chk = midifilePath.Substring(1, midifilePath.Length - 2);
+            chk = chk.Replace(@"\\", @"\");
+            sFile = chk;
+            Play();
+        }
+        
     }
 	public void Play()
 	{

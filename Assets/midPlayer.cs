@@ -55,14 +55,20 @@ public class midPlayer : MonoBehaviour {
     //생성된 url에 요청을 보낸 후, 미디파일받아온다.
     public string GetMidiFile()
     {
-        
-        HttpWebRequest req = (HttpWebRequest)WebRequest.Create(this.Url);
+        try
+        {
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(this.Url);
 
-        req.Method = "POST";
-        HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-        StreamReader sr = new StreamReader(resp.GetResponseStream());
-        String filePath = sr.ReadToEnd();
-        return filePath;
+            req.Method = "POST";
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+            StreamReader sr = new StreamReader(resp.GetResponseStream());
+            String filePath = sr.ReadToEnd();
+            return filePath;
+        }catch (WebException ex) { 
+            WebResponse errorResponse = (WebResponse)ex.Response;
+            return "";
+        }
+        
 
     }
     public string GetCombineFile()
