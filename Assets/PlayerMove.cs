@@ -15,11 +15,11 @@ public class PlayerMove : MonoBehaviour {
 	public GameObject curCube;
 	int curxPos, curyPos,maxPosX,maxPosY;
 	int CubeType,backPosx,backPosy;
-    private bool contected;
+    //private bool contected;
 	Stack<Point> st;
 	// Use this for initialization
 	void Start () {
-        contected = false;
+        //contected = false;
 		curxPos = 0;
 		curyPos = 0;
 		backPosx = 0;
@@ -27,7 +27,6 @@ public class PlayerMove : MonoBehaviour {
 		maxPosX = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getX();
 		maxPosY = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getY();
 	}
-
   
 
     public bool backPosEqual(){
@@ -53,9 +52,11 @@ public class PlayerMove : MonoBehaviour {
 				bool IsTrue = backPosEqual ();
 				if (((curType == 0 || curType == curGetType)&& visitTrue==0) || curGetType==-1||(IsTrue&& visitTrue==curGetType)) {
 					if ((IsTrue&& visitTrue==curGetType)) {
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
-					}
+                        if (curType == curGetType && curType == visitTrue){
+                            stopAudio();
+                        }
+                        eraseRoute(backPosx, backPosy);
+                    }
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position += new Vector3 (0, (curCube.transform.localScale.y+0.157f), 0);
                     GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
@@ -74,9 +75,11 @@ public class PlayerMove : MonoBehaviour {
 				bool IsTrue = backPosEqual ();
 				if (((curType == 0 || curType == curGetType)&& visitTrue==0) || curGetType==-1 || (IsTrue&& visitTrue==curGetType)) {
 					if ((IsTrue&& visitTrue==curGetType)) {
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
-					}
+                        if (curType == curGetType && curType == visitTrue){
+                            stopAudio();
+                        }
+                        eraseRoute(backPosx, backPosy);
+                    }
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position -= new Vector3 (0, (curCube.transform.localScale.y+0.157f), 0);
                     GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
@@ -95,9 +98,11 @@ public class PlayerMove : MonoBehaviour {
 				bool IsTrue = backPosEqual ();
 				if (((curType == 0 || curType == curGetType)&& visitTrue==0) || curGetType==-1 ||(IsTrue&& visitTrue==curGetType)) {
 					if ((IsTrue&& visitTrue==curGetType)) {
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
-					}
+                        if (curType == curGetType && curType == visitTrue){
+                            stopAudio();
+                        }
+                        eraseRoute(backPosx, backPosy);
+                    }
 					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
 					transform.position -= new Vector3 (curCube.transform.localScale.x+0.157f,  0, 0);
                     GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
@@ -109,37 +114,46 @@ public class PlayerMove : MonoBehaviour {
 			}
 		} else if (Input.GetKeyUp (KeyCode.RightArrow)) {
 			if (curxPos + 1 < maxPosX) {
-				backPosx = curxPos;
-				backPosy = curyPos;
-				curxPos += 1;
-				curType = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getPos (curxPos,curyPos);
-				int visitTrue = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().visitChk (curxPos,curyPos);
-				bool IsTrue = backPosEqual ();
+                //addPos(curxPos, curyPos, curType, curGetType);
+                backPosx = curxPos;
+                backPosy = curyPos;
+                curxPos += 1;
+                curType = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().getPos(curxPos, curyPos);
+                int visitTrue = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().visitChk(curxPos, curyPos);
+                bool IsTrue = backPosEqual();
 
-				if (((curType == 0 || curType == curGetType)&& visitTrue==0) || curGetType==-1 || (IsTrue&& visitTrue==curGetType)) {
-					if ((IsTrue&& visitTrue==curGetType)) {
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().myRendererSet (backPosx, backPosy);
-						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPop (backPosx, backPosy);
-					}
-					GameObject.Find ("FontController").GetComponent<FontController> ().CountingTurn ();
-					transform.position += new Vector3 (curCube.transform.localScale.x+0.157f, 0, 0);
+                if (((curType == 0 || curType == curGetType) && visitTrue == 0) || curGetType == -1 || (IsTrue && visitTrue == curGetType))
+                {
+                    if ((IsTrue && visitTrue == curGetType)){
+                        if (curType == curGetType && curType == visitTrue){
+                            stopAudio();
+                        }
+                        eraseRoute(backPosx, backPosy);
+                    }
+                    GameObject.Find("FontController").GetComponent<FontController>().CountingTurn();
+                    transform.position += new Vector3(curCube.transform.localScale.x + 0.157f, 0, 0);
                     GameObject.Find("effectSound").GetComponent<AudioSource>().Play();
-                } else {
-					curxPos -= 1;
-				}
-				//st.Push (Point (curxPos, curyPos));
-			}
+                }
+                else
+                {
+                    curxPos -= 1;
+                }
+                //st.Push (Point (curxPos, curyPos));
+            }
 		}
+        setXYAndType(curxPos, curyPos, curType, curGetType);
+    }
 
-		GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setXY (curxPos, curyPos);
-		if (curType > 0 && curType == curGetType) {
-			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setGetType (-1);
+    private void setXYAndType(int curxPos, int curyPos, int curType, int curGetType) {
+        GameObject.Find("Main Camera").GetComponent<MatrixCreate>().setXY(curxPos, curyPos);
+        if (curType > 0 && curType == curGetType)
+        {
+            GameObject.Find("Main Camera").GetComponent<MatrixCreate>().setGetType(-1);
 
-		}
-	}
+        }
+    }
 
-	void OnTriggerEnter2D(Collider2D col){
-
+    void OnTriggerEnter2D(Collider2D col){
 		if (col.gameObject.tag == "Cube1") {
 			GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (1);
 		}
@@ -158,13 +172,11 @@ public class PlayerMove : MonoBehaviour {
 		else{
             GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().setCurType (0);
 		}
-
 	}
-
     
 	public void PickCube(){
 		CubeType=GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getCurType();
-      
+        
 		if (CubeType > 0) {
         
             bool pickTrue = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().chkCompleteCube(CubeType);
@@ -179,6 +191,16 @@ public class PlayerMove : MonoBehaviour {
             }
 		}
 	}
+
+    private void eraseRoute(int backPosx, int backPosy) {
+        GameObject.Find("Main Camera").GetComponent<MatrixCreate>().myRendererSet(backPosx, backPosy);
+        GameObject.Find("Main Camera").GetComponent<MatrixCreate>().curPosPop(backPosx, backPosy);
+    }
+
+    private void stopAudio() {
+        GameObject.Find("CubeSound").GetComponent<AudioSource>().Stop();
+    }
+
 	// Update is called once per frame
 	void Update () {
 		Move ();
