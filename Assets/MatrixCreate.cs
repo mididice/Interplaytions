@@ -109,8 +109,9 @@ public class MatrixCreate : MonoBehaviour {
 				Matrix [i, j] = 0;
 			}
 		}
-
-		MatrixPatternInit (Random.Range(0, 4));
+        int map = Random.Range(0, 4);
+        PlayerPrefs.SetInt("map", map);
+        MatrixPatternInit (map);
 	
 		float cubeRow =cube[0].transform.localScale.x+0.1f;
 		float cubeCol = cube[0].transform.localScale.y+0.1f;
@@ -177,7 +178,7 @@ public class MatrixCreate : MonoBehaviour {
 	}
 
 	public void curPosPush(int type){
-		visit [xPos, yPos] = type;
+        visit [xPos, yPos] = type;
 		stack.Push (new KeyValuePair<int,int> (xPos, yPos));
 	}
 
@@ -218,7 +219,7 @@ public class MatrixCreate : MonoBehaviour {
         return completeCube[idx];
     }
 	public void setGetType(int val){ // set current Pick ColorType status. 
-		if (val == -1) {
+		if (val == -1) { 
 			if (stack.Count > 1) {
 				string typeName = "BottomTile" + bottomTileIdx.ToString ();
                 typeArray[bottomTileIdx] = getType - 1;
@@ -241,6 +242,7 @@ public class MatrixCreate : MonoBehaviour {
 			while (stack.Count > 0) {
 				KeyValuePair<int,int> tmp = stack.Peek ();
 				ani = matrixCube [tmp.Key, tmp.Value].GetComponent<Animator> ();
+                
 				if (stack.Count <=1) {
 					if (contectedTrue)
 						Contectedmatrix = Contectedmatrix + "@"+tmp.Key.ToString () + tmp.Value.ToString ();
@@ -269,11 +271,10 @@ public class MatrixCreate : MonoBehaviour {
                     gotTiles += typeArray[i].ToString()+"|";
                 }
                 PlayerPrefs.SetString("resultTiles", gotTiles);
-                Debug.Log(gotTiles);
                 Invoke("EndSceneCall", 5.0f);
 				//SceneManager.LoadScene("endscene");
 			}
-		} else {
+		} else { // picked cube
 			ani=matrixCube[xPos,yPos].GetComponent<Animator>();
 			ani.SetTrigger ("Pick");
 			getType = val;
@@ -296,6 +297,5 @@ public class MatrixCreate : MonoBehaviour {
 		if (Input.GetKeyUp (KeyCode.A)) {
 			player.GetComponent<PlayerMove> ().PickCube ();
 		}
-			
 	}
 }
