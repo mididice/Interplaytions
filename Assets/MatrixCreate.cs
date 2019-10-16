@@ -178,8 +178,10 @@ public class MatrixCreate : MonoBehaviour {
 	}
 
 	public void curPosPush(int type){
-        visit [xPos, yPos] = type;
-		stack.Push (new KeyValuePair<int,int> (xPos, yPos));
+        if (visit[xPos, yPos] == 0) {
+            visit[xPos, yPos] = type;
+            stack.Push(new KeyValuePair<int, int>(xPos, yPos));
+        }
 	}
 
 	public void curPosPop(int x,int y){
