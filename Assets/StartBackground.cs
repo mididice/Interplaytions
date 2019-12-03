@@ -25,8 +25,7 @@ public class StartBackground : MonoBehaviour {
 		Vector3 initPosition = new Vector3 (-9.7f, -4.17f, 0);
 
 		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				int idx = Matrix [i, j];
+			for (int j = 0; j < col; j++) { 
 				Instantiate (BgCube, new Vector3 (initPosition.x + (cubeRow * i), initPosition.y + (cubeCol * j), initPosition.z), Quaternion.identity);
 			}
 		}

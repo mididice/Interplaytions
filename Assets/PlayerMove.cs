@@ -20,6 +20,7 @@ public class PlayerMove : MonoBehaviour
     int CubeType, backPosx, backPosy;
     int visited;
     Stack<Point> footprints;
+    public static int connectedNum;
     // Use this for initialization
     void Start()
     {
@@ -31,6 +32,7 @@ public class PlayerMove : MonoBehaviour
         footprints = new Stack<Point>();
         maxPosX = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().getX();
         maxPosY = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().getY();
+        connectedNum = 0;
     }
 
     public bool backPosEqual()
@@ -262,6 +264,7 @@ public class PlayerMove : MonoBehaviour
         if (curType > 0 && curType == pickedType)
         {
             GameObject.Find("Main Camera").GetComponent<MatrixCreate>().setGetType(-1);
+            connectedNum += 1;
         }
     }
 
@@ -318,16 +321,19 @@ public class PlayerMove : MonoBehaviour
 
         if (CubeType > 0)
         {
-
             bool pickTrue = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().chkCompleteCube(CubeType);
             if (!pickTrue)
             {
-                // contected = true;
-                //GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GenerateUrl(CubeType);
+                footprints = new Stack<Point>();
                 GameObject.Find("CubeSound").GetComponent<SoundSetting>().settingSound(CubeType - 1);
                 GameObject.Find("CubeSound").GetComponent<AudioSource>().Play();
                 GameObject.Find("Main Camera").GetComponent<MatrixCreate>().curPosPush(CubeType);
                 GameObject.Find("Main Camera").GetComponent<MatrixCreate>().setGetType(CubeType);
+                if (connectedNum >= 4) { 
+                    bool isPossible = GameObject.Find("Main Camera").GetComponent<MatrixCreate>().isPossibleLink();
+                    if(!isPossible)
+                    GameObject.Find("Main Camera").GetComponent<MatrixCreate>().EndScene(4);
+                }
             }
         }
     }

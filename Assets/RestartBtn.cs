@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class RestartBtn : MonoBehaviour {
 
     public Sprite[] btnSprite;
-    private bool Restartbtn;
+    private bool restartBtn;
     // Use this for initialization
     void Start () {
-        Restartbtn = true ;
+        restartBtn = true ;
     }
 	
 	// Update is called once per frame
@@ -23,16 +23,19 @@ public class RestartBtn : MonoBehaviour {
         if (Input.GetKey(KeyCode.UpArrow))
         {
             gameObject.GetComponent<Image>().sprite = btnSprite[0];
-            Restartbtn = true;
+            restartBtn = true;
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
             gameObject.GetComponent<Image>().sprite = btnSprite[1];
-            Restartbtn = false;
+            restartBtn = false;
         }
         else if (Input.GetKeyUp(KeyCode.A))
         {
-            if (Restartbtn) SceneManager.LoadScene("firstsene");
+            if (restartBtn)
+            {
+                SceneManager.LoadScene("startScene");
+            }
         }
     }
 }

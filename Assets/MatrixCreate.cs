@@ -150,9 +150,18 @@ public class MatrixCreate : MonoBehaviour
         return Contectedmatrix;
     }
 
-    public void EndScene()
+    public void EndScene(int num)
     {
-        SceneManager.LoadScene("endscene");
+        PlayerEnd(0);
+        int curScore = GameObject.Find("FontController").GetComponent<FontController>().getScore();
+        PlayerPrefs.SetInt("Score", curScore);
+        string gotTiles = "";
+        for (int i = 0; i <= num; i++)
+        {
+            gotTiles += typeArray[i].ToString() + "|";
+        }
+        PlayerPrefs.SetString("resultTiles", gotTiles);
+        Invoke("EndSceneCall", 5.0f);
     }
 
     public void PlayerEnd(int status)
@@ -164,15 +173,14 @@ public class MatrixCreate : MonoBehaviour
             gameOverPanel.SetActive(true);
         }
         else
+        {
             gameWinnerPanel.SetActive(true);
-        //  string file=GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GetCombineFile();
-        // GameObject.Find("MidiFileChecking").GetComponent<testmid>().SetsFile(file);
-
+        }
     }
 
     private void EndSceneCall()
     {
-        Debug.Log("End Scene Call");
+        //Debug.Log("End Scene Call");
         string file = GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GetCombineFile();
         GameObject.Find("MidiFileChecking").GetComponent<testmid>().SetsFile(file);
         SceneManager.LoadScene("endscene");
@@ -197,6 +205,14 @@ public class MatrixCreate : MonoBehaviour
         if (Matrix[x, y] == 0)
         {
             matrixCube[x, y].GetComponent<EmptyCrash>().Setrenderer();
+        }
+    }
+
+    private void visitedCube(int type)
+    {
+        if (visit[xPos, yPos] == 0)
+        {
+            visit[xPos, yPos] = type;
         }
     }
 
@@ -272,7 +288,7 @@ public class MatrixCreate : MonoBehaviour
                 GameObject.Find("MidiFileChecking").GetComponent<midPlayer>().GenerateUrl(getType);
                 GameObject.Find("CubeSound").GetComponent<AudioSource>().Stop();
                 GameObject.Find("tileContectedSound").GetComponent<AudioSource>().Play();
-
+                visitedCube(val);
                 completeCube[getType] = true;
             }
 
@@ -312,7 +328,6 @@ public class MatrixCreate : MonoBehaviour
                 PlayerEnd(1);
                 int curScore = GameObject.Find("FontController").GetComponent<FontController>().getScore();
                 PlayerPrefs.SetInt("Score", curScore);
-                PlayerPrefs.SetString("UserMatrix", Contectedmatrix);
                 string gotTiles = "";
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -320,7 +335,6 @@ public class MatrixCreate : MonoBehaviour
                 }
                 PlayerPrefs.SetString("resultTiles", gotTiles);
                 Invoke("EndSceneCall", 5.0f);
-                //SceneManager.LoadScene("endscene");
             }
         }
         else
@@ -347,9 +361,6 @@ public class MatrixCreate : MonoBehaviour
     }
     public bool isPossibleLink()
     {
-        for (int i = 0; i < completeCube.Length; i++) {
-            Debug.Log("complete:" + completeCube[i]);
-        }
         bool[,] pass = new bool[row, col];
         Queue<ArrayList> exploreTarget = new Queue<ArrayList>();
         int type = getGetType();
@@ -360,8 +371,9 @@ public class MatrixCreate : MonoBehaviour
             ArrayList path = exploreTarget.Dequeue();
             int xPos = (int)path[0];
             int yPos = (int)path[1];
+            
             pass[xPos, yPos] = true;
-            if (xPos - 1 > 0 && pass[xPos -1, yPos] == false) {
+            if (xPos - 1 >= 0 && pass[xPos -1, yPos] == false) {
                 if (getPos(xPos - 1, yPos) == type) {
                     return true;
                 }
@@ -380,7 +392,7 @@ public class MatrixCreate : MonoBehaviour
                     exploreTarget.Enqueue(new ArrayList() { xPos + 1, yPos });
                 }
             }
-            if (yPos - 1 > 0 && pass[xPos, yPos -1] == false) {
+            if (yPos - 1 >= 0 && pass[xPos, yPos -1] == false) {
                 if (getPos(xPos, yPos-1) == type)
                 {
                     return true;

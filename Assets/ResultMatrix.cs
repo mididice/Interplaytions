@@ -108,7 +108,13 @@ public class ResultMatrix : MonoBehaviour {
             {
                 int idx = Matrix[i, j];
                 cube[idx].transform.localScale = new Vector3(1f, 1f, 0);
-                matrixCube[i, j] = Instantiate(cube[idx], new Vector3(initPosition.x + (cubeRow * i), initPosition.y + (cubeCol * j) , initPosition.z), Quaternion.identity) as GameObject;
+                if (idx > 0)
+                {
+                    matrixCube[i, j] = Instantiate(cube[idx], new Vector3(initPosition.x + (cubeRow * i), initPosition.y + (cubeCol * j), initPosition.z-1), Quaternion.identity) as GameObject;
+                }
+                else {
+                    matrixCube[i, j] = Instantiate(cube[idx], new Vector3(initPosition.x + (cubeRow * i), initPosition.y + (cubeCol * j), initPosition.z), Quaternion.identity) as GameObject;
+                }
             }
         }
         
