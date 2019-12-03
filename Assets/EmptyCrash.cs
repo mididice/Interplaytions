@@ -38,7 +38,7 @@ public class EmptyCrash : MonoBehaviour {
 			if (ani == null) {
 				//myRenderer = GetComponent<SpriteRenderer> ();
 				ani = gameObject.GetComponent<Animator> ();
-				int pickType = GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().getPos ();
+				
 				if (curType > 0) {
 					if (BackPosChk==1) {
 						GameObject.Find ("Main Camera").GetComponent<MatrixCreate> ().curPosPush (curType);
